@@ -2,9 +2,13 @@
   (:require
    [re-frame.core :as re-frame]
    [housedisplay.subs :as subs]
+   [housedisplay.trimet.core :as trimet]
+   [cljs-time.coerce :as c]
+   [cljs-time.format :as fmt]
    ))
 
 ; pi foundation screen is 800x480
+(def arrival-format (fmt/formatters :hour-minute-second))
 
 (defn clock []
   (let [t @(re-frame/subscribe [::subs/current-time])
@@ -17,8 +21,11 @@
   ^{:key (:id arrival)}
   [:div {:style {:display "inline-block"
                  :border "1px dashed blue"}}
-   [:span (:id arrival)]
-   [:span (:shortSign arrival)]
+   [:div {:style {:margin "10px" }} (:id arrival)]
+   [:div {:style {:margin "10px" }} (:shortSign arrival)]
+   [:div (str "soonest bus is " (fmt/unparse arrival-format (c/from-long (trimet/get-soonest-bus arrival))))]
+;   [:div (:estimated arrival)]
+;   [:div (:scheduled arrival)]
    ]
   )
 

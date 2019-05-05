@@ -1,13 +1,14 @@
 (defproject housedisplay "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.520"]
+                 [bidi "2.1.5"]
                  [cljs-ajax "0.8.0"]
-                 [reagent "0.8.1"]
-                 [re-frame "0.10.6"]
+                 [com.andrewmcveigh/cljs-time "0.5.2"]
                  [day8.re-frame/http-fx "0.1.6"]
                  [district0x/re-frame-interval-fx "1.0.2"]
-                 [bidi "2.1.5"]
                  [kibu/pushy "0.3.8"]
+                 [reagent "0.8.1"]
+                 [re-frame "0.10.6"]
                  ; Selmer is used to pass config to the client
                  ; and keep our api keys out of source control
                  [selmer "1.12.12"]]

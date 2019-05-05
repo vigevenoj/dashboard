@@ -47,12 +47,11 @@
 
 (re-frame/reg-event-db
   :update-clock
- (fn [db]
-   (swap! db assoc :current-time (js/Date.))))
+ (fn-traced [db]
+   (assoc db :current-time (js/Date.))))
 
-(reg-event-fx
-  :update-clock
- (fn []
-   {:dispatch-interval {:dispatch [:update-clock]
-                        :id :update-clock-interval
-                        :ms 1000}}))
+(defn dispatch-update-clock-event
+  []
+  (re-frame/dispatch [:update-clock]))
+
+;(defonce do-clock-dispatch (js/setInterval dispatch-update-clock-event 1000))
