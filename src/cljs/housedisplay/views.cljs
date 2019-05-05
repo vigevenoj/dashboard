@@ -3,6 +3,7 @@
    [re-frame.core :as re-frame]
    [housedisplay.subs :as subs]
    [housedisplay.trimet.core :as trimet]
+   [cljs-time.core]
    [cljs-time.coerce :as c]
    [cljs-time.format :as fmt]
    ))
@@ -23,7 +24,13 @@
                  :border "1px dashed blue"}}
    [:div {:style {:margin "10px" }} (:id arrival)]
    [:div {:style {:margin "10px" }} (:shortSign arrival)]
-   [:div (str "soonest bus is " (fmt/unparse arrival-format (c/from-long (trimet/get-soonest-bus arrival))))]
+   [:div
+    (str "soonest bus is "
+         (fmt/unparse arrival-format
+                      (c/from-long
+                       (trimet/get-soonest-bus arrival))))]
+   ; this fails if the now > soonest, should check that
+   [:div (str (cljs-time.core/in-minutes (cljs-time.core/interval (cljs-time.core/now) (c/from-long (trimet/get-soonest-bus arrival)))) "minutes ")]
 ;   [:div (:estimated arrival)]
 ;   [:div (:scheduled arrival)]
    ]
