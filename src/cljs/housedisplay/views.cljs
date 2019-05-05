@@ -6,6 +6,12 @@
 
 ; pi foundation screen is 800x480
 
+(defn clock []
+  (let [t @(re-frame/subscribe [::subs/current-time])
+         time-string (-> @(re-frame/subscribe [::subs/current-time])
+                    .toTimeString (clojure.string/split " ") first)
+        ]
+    [:h1.clock time-string]))
 
 (defn single-arrival [arrival]
   ^{:key (:id arrival)}
@@ -20,7 +26,7 @@
   (let [name (re-frame/subscribe [::subs/name])
         arrivals (re-frame/subscribe [::subs/arrivals])]
     [:div
-     [:h1 "Hello from " @name]
+     [clock]
      [:div#bus-info
      [:div {:on-click #(re-frame/dispatch [:get-bus])
             :style {:width "100px"
@@ -28,8 +34,6 @@
                     :display "inline-block"
                     :background-color "black"
                     :cursor "pointer"}}
-      (.log js/console @arrivals)
-      (.log js/console (seq? @arrivals))
       [:div#arrivals {:style {:border "1px dotted red"
                               :margin-left "100px"}}
        (map #(single-arrival %) @arrivals)]]]]))

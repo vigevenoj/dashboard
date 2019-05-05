@@ -8,6 +8,11 @@
    (:name db)))
 
 (re-frame/reg-sub
+  ::current-time
+ (fn [db]
+   (:current-time db)))
+
+(re-frame/reg-sub
   ::arrivals
  (fn [db]
    (:arrival (:resultSet (:bus-data db)))))

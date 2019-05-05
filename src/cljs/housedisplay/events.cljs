@@ -1,10 +1,10 @@
 (ns housedisplay.events
   (:require [ajax.core :as ajax]
-   [re-frame.core :as re-frame]
-   [housedisplay.db :as db]
-   [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
-   [day8.re-frame.http-fx]
-   ))
+            [re-frame.core :as re-frame]
+            [housedisplay.db :as db]
+            [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
+            [day8.re-frame.http-fx]
+            [district0x.re-frame.interval-fx]))
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -44,3 +44,15 @@
  ::bus-fetched
  (fn [db [_ response]]
    (merge db {:bus-data response})))
+
+(re-frame/reg-event-db
+  :update-clock
+ (fn [db]
+   (swap! db assoc :current-time (js/Date.))))
+
+(reg-event-fx
+  :update-clock
+ (fn []
+   {:dispatch-interval {:dispatch [:update-clock]
+                        :id :update-clock-interval
+                        :ms 1000}}))
