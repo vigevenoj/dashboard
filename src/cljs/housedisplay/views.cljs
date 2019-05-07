@@ -16,22 +16,24 @@
          time-string (-> @(re-frame/subscribe [::subs/current-time])
                     .toTimeString (clojure.string/split " ") first)
         ]
-    [:h1.clock time-string]))
+    [:h1.clock {:style {:font "monospace"}} time-string]))
 
 (defn single-arrival [arrival]
   ^{:key (:id arrival)}
-  [:div {:style {:display "inline-block"
-                 :border "1px dashed blue"}}
-   [:div {:style {:margin "10px" }} (:id arrival)]
-   [:div {:style {:margin "10px" }} (:shortSign arrival)]
-   [:div
-    (str "soonest bus is "
-         (fmt/unparse arrival-format
-                      (c/from-long
-                       (trimet/get-soonest-bus arrival))))]
-   ; this fails if the now > soonest, should check that
-   [:div (str (cljs-time.core/in-minutes (cljs-time.core/interval (cljs-time.core/now) (c/from-long (trimet/get-soonest-bus arrival)))) "minutes ")]]
-  )
+  [:div.w-30
+   [:div.card
+   [:div.card-body
+    [:h5.card-title (:shortSign arrival)]
+    ; this fails if the now > soonest, should check that
+    [:p.card-text (str (cljs-time.core/in-minutes
+                        (cljs-time.core/interval
+                         (cljs-time.core/now)
+                         (c/from-long
+                          (trimet/get-soonest-bus arrival)))) " minutes ")]
+    [:p.card-text (str "soonest bus is "
+                       (fmt/unparse arrival-format
+                                    (c/from-long
+                                     (trimet/get-soonest-bus arrival))))]]]])
 
 (defn main-panel []
   (let [name (re-frame/subscribe [::subs/name])
@@ -45,5 +47,5 @@
                                                              :on-click #(re-frame/dispatch [:get-bus])}
          "BUSES"]]]
       [:div#page-content-wrapper
-       [:div.container-fluid
+       [:div.card-deck
         (map #(single-arrival %) @arrivals)]]]]))

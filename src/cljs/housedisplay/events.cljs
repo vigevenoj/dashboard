@@ -51,11 +51,12 @@
 
 (re-frame/reg-event-db
   :update-clock
- (fn-traced [db]
-   (assoc db :current-time (js/Date.))))
+ (fn [db [_ new-time]]
+   (assoc db :current-time new-time)))
 
 (defn dispatch-update-clock-event
   []
-  (re-frame/dispatch [:update-clock]))
+  (let [now (js/Date.)]
+    (re-frame/dispatch [:update-clock now])))
 
-;(defonce do-clock-dispatch (js/setInterval dispatch-update-clock-event 1000))
+(defonce do-clock-dispatch (js/setInterval dispatch-update-clock-event 1000))

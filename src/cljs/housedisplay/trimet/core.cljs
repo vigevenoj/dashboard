@@ -11,6 +11,7 @@
 
 (defn get-soonest-bus
   "Parse an arrival for the soonest of scheduled or estimated"
+  ; todo: this is GMT, convert to local (pacific) time
   [arrival]
   (min (:scheduled arrival) (handle-estimated (:estimated arrival))))
 
