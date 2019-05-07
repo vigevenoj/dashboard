@@ -46,6 +46,10 @@
    (merge db {:bus-data response})))
 
 (re-frame/reg-event-db
+  ::bus-fetch-failure
+ (.log js/console "Failed to fetch buses"))
+
+(re-frame/reg-event-db
   :update-clock
  (fn-traced [db]
    (assoc db :current-time (js/Date.))))

@@ -30,24 +30,20 @@
                       (c/from-long
                        (trimet/get-soonest-bus arrival))))]
    ; this fails if the now > soonest, should check that
-   [:div (str (cljs-time.core/in-minutes (cljs-time.core/interval (cljs-time.core/now) (c/from-long (trimet/get-soonest-bus arrival)))) "minutes ")]
-;   [:div (:estimated arrival)]
-;   [:div (:scheduled arrival)]
-   ]
+   [:div (str (cljs-time.core/in-minutes (cljs-time.core/interval (cljs-time.core/now) (c/from-long (trimet/get-soonest-bus arrival)))) "minutes ")]]
   )
 
 (defn main-panel []
   (let [name (re-frame/subscribe [::subs/name])
         arrivals (re-frame/subscribe [::subs/arrivals])]
-    [:div
+    [:div#top-wrapper.wrapper
      [clock]
-     [:div#bus-info
-     [:div {:on-click #(re-frame/dispatch [:get-bus])
-            :style {:width "100px"
-                    :height "100px"
-                    :display "inline-block"
-                    :background-color "black"
-                    :cursor "pointer"}}
-      [:div#arrivals {:style {:border "1px dotted red"
-                              :margin-left "100px"}}
-       (map #(single-arrival %) @arrivals)]]]]))
+     [:div.wrapper.d-flex
+      [:div#sidebar-wrapper.bg-light.border-right
+       [:div.list-group.list-group-flush
+        [:a.list-group-item.list-group-item-action.bg-light {:href "#"
+                                                             :on-click #(re-frame/dispatch [:get-bus])}
+         "BUSES"]]]
+      [:div#page-content-wrapper
+       [:div.container-fluid
+        (map #(single-arrival %) @arrivals)]]]]))
