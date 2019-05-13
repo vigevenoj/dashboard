@@ -14,7 +14,8 @@
   (let [t           @(re-frame/subscribe [::subs/current-time])
         time-string (-> @(re-frame/subscribe [::subs/current-time])
                         .toTimeString (clojure.string/split " ") first)]
-    [:h1.clock {:style {:font "monospace"}} time-string]))
+    [:h1.clock {:style {:font "monospace"
+                        :text-align "center"}} time-string]))
 
 (defn single-arrival [arrival]
   ^{:key (:id arrival)}
@@ -24,13 +25,17 @@
      [:h5.card-title (:shortSign arrival)]
      ; this fails if the now > soonest, should check that
      [:p.card-text
-      (str
-        (time/in-minutes
-         (time/interval
-          (time/now)
-          (c/from-long
-           (trimet/get-soonest-bus arrival))))
-        " minutes ")]
+      (let [n (time/now)
+            soonest (trimet/get-soonest-bus arrival)]
+        (if (< n soonest) ; todo: check if less than 5 minutes
+          (str
+           (time/in-minutes ; todo: or do 5 minute check here?
+            (time/interval
+             (time/now)
+             (c/from-long
+              (trimet/get-soonest-bus arrival))))
+           " minutes ")
+          "Bus passed"))]
      [:p.card-text
       (str "soonest bus is "
            (fmt/unparse arrival-format

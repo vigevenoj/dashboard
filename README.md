@@ -1,6 +1,8 @@
 # housedisplay
 
-A [re-frame](https://github.com/Day8/re-frame) application designed to ... well, that part is up to you.
+A [re-frame](https://github.com/Day8/re-frame) application designed to display upcoming arrivals to Trimet stops.
+
+![Screenshot 1](./docs/screenshot-1.png)
 
 ## Development Mode
 
