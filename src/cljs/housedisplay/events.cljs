@@ -59,4 +59,9 @@
   (let [now (js/Date.)]
     (re-frame/dispatch [:update-clock now])))
 
+(defn dispatch-fetch-arrivals-event
+  []
+  (re-frame/dispatch [:get-bus]))
+
 (defonce do-clock-dispatch (js/setInterval dispatch-update-clock-event 1000))
+(defonce do-arrivals-fetch-60s (js/setInterval dispatch-fetch-arrivals-event (* 60 1000)))

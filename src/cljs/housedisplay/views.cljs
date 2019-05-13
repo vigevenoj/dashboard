@@ -22,12 +22,13 @@
    [:div.card
     [:div.card-body
      [:h5.card-title (:shortSign arrival)]
-     ; this fails if the now > soonest, should check that
      [:p.card-text
       (let [n (time/now)
             soonest (trimet/get-soonest-bus arrival)]
         (if (< n soonest) ; todo: check if less than 5 minutes
           (str
+           ; todo: should make it red if departing soon
+           ; or make it some other color if delayed?
            (time/in-minutes ; todo: or do 5 minute check here?
             (time/interval
              (time/now)
