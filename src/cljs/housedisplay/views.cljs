@@ -3,7 +3,7 @@
    [re-frame.core :as re-frame]
    [housedisplay.subs :as subs]
    [housedisplay.trimet.core :as trimet]
-   [cljs-time.core]
+   [cljs-time.core :as time]
    [cljs-time.coerce :as c]
    [cljs-time.format :as fmt]
    ))
@@ -25,15 +25,15 @@
    [:div.card-body
     [:h5.card-title (:shortSign arrival)]
     ; this fails if the now > soonest, should check that
-    [:p.card-text (str (cljs-time.core/in-minutes
-                        (cljs-time.core/interval
-                         (cljs-time.core/now)
+    [:p.card-text (str (time/in-minutes
+                        (time/interval
+                         (time/now)
                          (c/from-long
                           (trimet/get-soonest-bus arrival)))) " minutes ")]
     [:p.card-text (str "soonest bus is "
                        (fmt/unparse arrival-format
-                                    (c/from-long
-                                     (trimet/get-soonest-bus arrival))))]]]])
+                                    (time/to-default-time-zone (c/from-long
+                                     (trimet/get-soonest-bus arrival)))))]]]])
 
 (defn main-panel []
   (let [name (re-frame/subscribe [::subs/name])
