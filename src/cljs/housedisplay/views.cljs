@@ -14,8 +14,7 @@
   (let [t           @(re-frame/subscribe [::subs/current-time])
         time-string (-> @(re-frame/subscribe [::subs/current-time])
                         .toTimeString (clojure.string/split " ") first)]
-    [:h1.clock {:style {:font "monospace"
-                        :text-align "center"}} time-string]))
+    [:h1.clock.display-1.text-center {:style {:font "monospace" }} time-string]))
 
 (defn single-arrival [arrival]
   ^{:key (:id arrival)}
