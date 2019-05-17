@@ -8,6 +8,8 @@ A [re-frame](https://github.com/Day8/re-frame) application designed to display u
 
 ### Run application:
 
+Edit resources/public/index.html to add a Trimet API key and comma-separated list of Trimet stops to watch. Then,
+
 ```
 lein clean
 lein figwheel dev
@@ -26,3 +28,7 @@ To compile clojurescript to javascript:
 lein clean
 lein cljsbuild once min
 ```
+
+## Docker
+A two-stage build compiles the application for production and then copies the compiled javascript into an nginx container to be served.
+Use environment variables `API_KEY` and `STOPS_LIST` to provide your Trimet API key and comma-separated list of Trimet stops to watch.
