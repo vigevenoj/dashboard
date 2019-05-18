@@ -17,7 +17,7 @@ RUN lein cljsbuild once min
 # It requires two environment variables to be set:
 # - API_KEY
 # - STOPS_LIST
-FROM arm32v7/nginx:1.16-alpine-perl
+FROM arm32v7/nginx:1.16-perl
 RUN mkdir -p /usr/share/nginx/html/js/compiled
 COPY --from=builder /app/resources/public/js/compiled/app.js /usr/share/nginx/html/js/compiled/app.js
 # get the index.html ready
