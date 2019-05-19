@@ -12,13 +12,12 @@
 
 (defn clock []
   (let [t           @(re-frame/subscribe [::subs/current-time])
-        time-string (-> @(re-frame/subscribe [::subs/current-time])
-                        .toTimeString (clojure.string/split " ") first)]
+        time-string (-> t .toTimeString (clojure.string/split " ") first)]
     [:h1.clock.display-1.text-center {:style {:font "monospace" }} time-string]))
 
 (defn single-arrival [arrival]
   ^{:key (:id arrival)}
-  [:div.w-30
+  [:div.w-27
    [:div.card
     [:div.card-body
      [:h5.card-title (:shortSign arrival)]
