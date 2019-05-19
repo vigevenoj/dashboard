@@ -1,6 +1,5 @@
 # First, compile the application
-FROM arm32v7/openjdk:8-jdk-alpine
-#FROM openjdk:8-alpine AS builder
+FROM openjdk:8-alpine AS builder
 RUN apk add curl bash
 RUN curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/bin/lein
 RUN chmod 755 /usr/bin/lein
