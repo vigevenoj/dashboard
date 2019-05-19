@@ -18,8 +18,7 @@ RUN lein cljsbuild once min
 # - API_KEY
 # - STOPS_LIST
 FROM nginx:1.16-alpine-perl
-RUN mkdir -p /usr/share/nginx/html/js/compiled
-COPY --from=builder /app/resources/public/js/compiled/app.js /usr/share/nginx/html/js/compiled/app.js
+COPY --from=builder /app/resources/public/js/compiled/app.js /usr/share/nginx/html/app.js
 # get the index.html ready
 # cat resources/public/index.html | tr "\n" " " # this is your index page, but we're going to 
 # serve it via this awful mess from https://serverfault.com/questions/196929/reply-with-200-from-nginx-config-without-serving-a-file

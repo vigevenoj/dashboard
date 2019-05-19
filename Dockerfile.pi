@@ -1,5 +1,6 @@
 # First, compile the application
-FROM openjdk:8-alpine AS builder
+FROM arm32v7/openjdk:8-jdk-alpine
+#FROM openjdk:8-alpine AS builder
 RUN apk add curl bash
 RUN curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/bin/lein
 RUN chmod 755 /usr/bin/lein
@@ -18,8 +19,7 @@ RUN lein cljsbuild once min
 # - API_KEY
 # - STOPS_LIST
 FROM arm32v7/nginx:1.16-perl
-RUN mkdir -p /usr/share/nginx/html/js/compiled
-COPY --from=builder /app/resources/public/js/compiled/app.js /usr/share/nginx/html/js/compiled/app.js
+COPY --from=builder /app/resources/public/js/compiled/app.js /usr/share/nginx/html/app.js
 # get the index.html ready
 # cat resources/public/index.html | tr "\n" " " # this is your index page, but we're going to 
 # serve it via this awful mess from https://serverfault.com/questions/196929/reply-with-200-from-nginx-config-without-serving-a-file
