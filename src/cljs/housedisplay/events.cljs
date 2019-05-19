@@ -1,7 +1,9 @@
 (ns housedisplay.events
   (:require [ajax.core :as ajax]
+            [clojure.string :as str]
             [re-frame.core :as re-frame]
             [housedisplay.db :as db]
+            [housedisplay.subs :as subs]
             [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
             [day8.re-frame.http-fx]
             [district0x.re-frame.interval-fx]))
@@ -14,8 +16,14 @@
 (re-frame/reg-event-db
  ::load-config
  (fn [db [_ config]]
-   (merge db {:api-key (-> "api-key" config)
-              :stops (-> "stops" config)})))
+   ;(.log js/console "config check: " (and (not (str/blank? (-> "api-key" config))) (not (str/blank? (-> "stops" config)))))
+   (if (and (not (str/blank? (-> "api-key" config))) (not (str/blank? (-> "stops" config))))
+     (merge db {:api-key (-> "api-key" config)
+                :stops (-> "stops" config)
+                :valid-config true})
+     (do ; last item is merging valid-config into the db as false, to make sure we return the db
+       (.log js/console "Invalid configuration")
+       (merge db {:valid-config false})))))
 
 (re-frame/reg-event-db
   :set-active-panel
@@ -59,9 +67,12 @@
   (let [now (js/Date.)]
     (re-frame/dispatch [:update-clock now])))
 
+(defonce do-clock-dispatch (js/setInterval dispatch-update-clock-event 1000))
+
 (defn dispatch-fetch-arrivals-event
   []
-  (re-frame/dispatch [:get-bus]))
+  (let [valid-config? @(re-frame/subscribe [::subs/valid-config])]
+    (when valid-config?
+          (re-frame/dispatch [:get-bus]))))
 
-(defonce do-clock-dispatch (js/setInterval dispatch-update-clock-event 1000))
 (defonce do-arrivals-fetch-60s (js/setInterval dispatch-fetch-arrivals-event (* 60 1000)))

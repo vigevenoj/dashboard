@@ -13,6 +13,11 @@
    (:current-time db)))
 
 (re-frame/reg-sub
+  ::valid-config
+ (fn [db]
+   (:valid-config db)))
+
+(re-frame/reg-sub
   ::arrivals
  (fn [db]
    (:arrival (:resultSet (:bus-data db)))))
