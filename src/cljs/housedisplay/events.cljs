@@ -58,6 +58,12 @@
  (.log js/console "Failed to fetch buses"))
 
 (re-frame/reg-event-db
+  ::toggle-bus-check-enabled
+ (fn [db]
+     (merge db {:bus-check-enabled
+                (not (:bus-check-enabled db))})))
+
+(re-frame/reg-event-db
   :update-clock
  (fn [db [_ new-time]]
    (assoc db :current-time new-time)))
@@ -71,8 +77,9 @@
 
 (defn dispatch-fetch-arrivals-event
   []
-  (let [valid-config? @(re-frame/subscribe [::subs/valid-config])]
-    (when valid-config?
+  (let [valid-config? @(re-frame/subscribe [::subs/valid-config])
+        enabled? @(re-frame/subscribe [::subs/bus-check-enabled])]
+    (when (and valid-config? enabled?)
           (re-frame/dispatch [:get-bus]))))
 
 (defonce do-arrivals-fetch-60s (js/setInterval dispatch-fetch-arrivals-event (* 60 1000)))

@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [housedisplay.subs :as subs]
+    [housedisplay.events :as events]
     [housedisplay.trimet.core :as trimet]
     [cljs-time.core :as time]
     [cljs-time.coerce :as c]
@@ -42,6 +43,12 @@
                           (c/from-long
                            (trimet/get-soonest-bus arrival)))))]]]])
 
+(defn toggle-bus-check []
+  (let [toggle @(re-frame/subscribe [::subs/bus-check-enabled])]
+    (if (true? toggle)
+      [:button {:on-click #(re-frame/dispatch [::events/toggle-bus-check-enabled])} "Disable bus check"]
+      [:button {:on-click #(re-frame/dispatch [::events/toggle-bus-check-enabled])} "Enable bus check"])))
+
 (defn main-panel []
   (let [name     (re-frame/subscribe [::subs/name])
         arrivals (re-frame/subscribe [::subs/arrivals])]
@@ -56,4 +63,5 @@
          "BUSES"]]]
       [:div#page-content-wrapper
        [:div.card-deck
-        (map #(single-arrival %) @arrivals)]]]]))
+        (map #(single-arrival %) @arrivals)]
+       [toggle-bus-check]]]]))

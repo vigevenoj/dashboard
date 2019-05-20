@@ -28,6 +28,11 @@
    (:bus-data db)))
 
 (re-frame/reg-sub
+  ::bus-check-enabled
+ (fn [db]
+   (:bus-check-enabled db)))
+
+(re-frame/reg-sub
   ::last-bus-check
  (fn [db]
    (:queryTime (:resultSet (:bus-data db)))))
